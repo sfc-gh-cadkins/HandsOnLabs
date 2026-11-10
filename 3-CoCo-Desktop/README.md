@@ -126,15 +126,16 @@ Building your own agent? Put the same guidance in its **System Prompt** (**Custo
 
 A copy is included in this folder at [`plugins/xo/`](plugins/xo/), so you don't need to download anything else.
 
-1. Make sure `node`, `git`, `gh`, and `jq` are on your PATH.
-2. Move the unzipped `3-CoCo-Desktop` folder to wherever you'll keep it. XO is registered from this location, so don't move or delete the folder afterwards.
-3. In a terminal, from the `3-CoCo-Desktop` folder, run the setup once:
+1. Move the unzipped `3-CoCo-Desktop` folder to wherever you'll keep it. CoCo uses the plugin from this location, so don't move or delete the folder afterwards.
+2. In CoCo Desktop, open **Customize > Plugins**, click **+**, and choose **Add Local Plugin**.
+3. Select the `plugins/xo` folder inside your `3-CoCo-Desktop` folder. XO appears in the Plugins list.
+4. Start a new session to use it.
 
-   ```bash
-   bash plugins/xo/setup.sh install
-   ```
+XO works right away in this mode. For its session-recording hooks to fire reliably, finish setup once from a terminal in the `3-CoCo-Desktop` folder (requires `node`, `git`, `gh`, and `jq`):
 
-4. Start a new session in CoCo Desktop and check that XO appears under **Customize > Plugins**. To check its health at any time, run `bash plugins/xo/setup.sh status`.
+```bash
+bash plugins/xo/setup.sh install
+```
 
 For a private, git-backed vault on your GitHub account, run `bash plugins/xo/setup.sh init` instead (requires `gh auth login`). The copy here is pinned to the version noted in [`plugins/README.md`](plugins/README.md); for updates, install from [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo). See XO's [SETUP.md](plugins/xo/SETUP.md) for details. Review a plugin's hooks and scripts before you install it.
 
