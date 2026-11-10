@@ -6,6 +6,22 @@ Part 1 of the CoCo Desktop series, first presented **November 10, 2026**. This l
 
 It's also Lab 3 of the [PawCore series](../README.md#the-series). Labs [1](../1-Cortex-AI-Snowflake-CoWork/) and [2](../2-Cortex-Code/) took PawCore from a quality problem to the SmartCollar V2 launch decision; this lab looks at support tickets after V2 launched. You don't need to run the earlier labs first.
 
+## Which CoCo download do I need?
+
+Get CoCo Desktop from the [official Snowflake CoCo downloads page](https://www.snowflake.com/en/product/snowflake-coco/downloads/) and pick one installer for your computer.
+
+**Mac:** open the Apple menu > **About This Mac**.
+- If it says **Chip: Apple M1, M2, M3, M4...**, choose **Mac with Apple silicon**. Most Macs bought since late 2020 use Apple silicon.
+- If it says **Processor: Intel...**, choose **Mac with Intel processor**.
+
+**Windows:** open **Settings > System > About** and look at **System type**.
+- **x64-based processor** means Windows (Intel/AMD), which is most PCs.
+- **ARM-based processor** means Windows (ARM), such as a Surface Pro X or Snapdragon Copilot+ PC.
+
+Then choose the installer scope:
+- **User** installs just for you and usually doesn't need admin rights. Pick User if you're unsure or on a work laptop without admin access.
+- **System** installs for everyone and needs admin rights. Use System only if IT asks you to.
+
 ## What's here
 
 **Start with the [Quickstart](QUICKSTART.md)**: step-by-step instructions to run the lab yourself. Stuck? See [Troubleshooting](TROUBLESHOOTING.md).
@@ -26,10 +42,6 @@ It's also Lab 3 of the [PawCore series](../README.md#the-series). Labs [1](../1-
 └── slides/
     └── index.html            # Opening slides (open in a browser; arrow keys to navigate)
 ```
-
-## Get CoCo Desktop
-
-Download it from the [official Snowflake CoCo downloads page](https://www.snowflake.com/en/product/snowflake-coco/downloads/) (macOS and Windows).
 
 ## What you need to try it yourself
 
