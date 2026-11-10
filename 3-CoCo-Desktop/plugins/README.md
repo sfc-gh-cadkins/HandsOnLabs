@@ -1,3 +1,3 @@
 # Bundled plugins
 
-`xo/` is an unmodified copy of the XO plugin (v3.3.1) by Dan Chaffelson, from [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo) at commit `32c70be` (2026-11-06). Licensed under Apache 2.0; see [`xo/LICENSE`](xo/LICENSE). For the latest version, use the upstream repo.
+`xo/` is a copy of the XO plugin (v3.5.4) by Dan Chaffelson, shared with his approval. Licensed under Apache 2.0; see [`xo/LICENSE`](xo/LICENSE). The only changes: clone links in `SETUP.md` and `setup/vault.js` point to the public [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo) repo, and `README.md` and `LICENSE` are carried over from the earlier public release. For the latest version, use the upstream repo.
