@@ -122,14 +122,24 @@ Building your own agent? Put the same guidance in its **System Prompt** (**Custo
 
 ## Optional: the XO plugin
 
-[XO](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo) is an open-source CoCo plugin built by Dan Chaffelson and published on Snowflake Labs (Apache 2.0). It keeps plain-text notes of your sessions in a vault you own, so work picks up where you left off, saves rules when you correct it, and works in steps (survey, plan, build, prove) sized to the job.
+[XO](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo) is an open-source CoCo plugin built by Dan Chaffelson (Apache 2.0). It keeps plain-text notes of your sessions in a vault you own, so work picks up where you left off, saves rules when you correct it, and works in steps (survey, plan, build, prove) sized to the job.
 
-A copy is included in this folder at [`plugins/xo/`](plugins/xo/), so you don't need to download anything else.
+A copy of the latest version (v3.5.4) is included in this folder at [`plugins/xo/`](plugins/xo/), so you don't need to download anything else. It's a good example of what a plugin can hold:
+- **A skill:** instructions CoCo follows for how to work.
+- **Hooks:** scripts that run automatically, like recording your session notes.
+- **Subagents:** helpers for planning, building, and checking work.
+- **An MCP server (`xo-ops`):** a small local script, installed with the plugin, that gives CoCo exact tools for saving and finding its notes. Nothing to set up in Snowflake.
+
+You need [Node.js](https://nodejs.org) installed for the hooks and MCP server to run.
 
 1. Move the unzipped `3-CoCo-Desktop` folder to wherever you'll keep it. CoCo uses the plugin from this location, so don't move or delete the folder afterwards.
 2. In CoCo Desktop, open **Customize > Plugins**, click **+**, and choose **Add Local Plugin**.
 3. Select the `plugins/xo` folder inside your `3-CoCo-Desktop` folder. XO appears in the Plugins list.
-4. Start a new session to use it.
+4. Fully quit and reopen CoCo Desktop.
+5. Open **Customize > MCP**, find `xo-ops`, and click **Connect**, then **Trust**. Until you do, XO's tools don't load.
+6. Start a new session to use it.
+
+Tip: once it's running, tell XO about your job (what you work on, who you work with, how you like things written) so it starts out knowing you.
 
 The copy here is pinned to the version noted in [`plugins/README.md`](plugins/README.md); for updates, see [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo). Review a plugin's hooks and scripts before you install it.
 

@@ -54,6 +54,9 @@ Open the whole `3-CoCo-Desktop` folder as a project, not a single file, then che
 **`@` doesn't find the meeting transcript**
 Make sure the `3-CoCo-Desktop` folder is open as your project, and that `data/meeting_transcript.md` is inside it.
 
+**XO doesn't record sessions, or its tools don't show up**
+Make sure [Node.js](https://nodejs.org) is installed. Then fully quit and reopen CoCo Desktop, open **Customize > MCP**, and click **Connect** and **Trust** on `xo-ops`.
+
 **The automation finds no tickets**
 The lab data covers August through October 2026, so "the last 7 days" can come back empty. Ask CoCo to use the most recent week in the data instead. Automations run on your computer and only while CoCo Desktop is open, so delete the lab one when you're done.
 
