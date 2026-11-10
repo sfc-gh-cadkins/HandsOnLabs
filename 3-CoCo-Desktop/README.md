@@ -18,6 +18,7 @@ It's also Lab 3 of the [PawCore series](../README.md#the-series). Labs [1](../1-
 │   └── human-voice/SKILL.md      # Skill that rewrites output in a plain, human voice
 ├── data/
 │   ├── support_tickets.csv           # 356 fictional PawCore support tickets (Aug-Oct 2026)
+│   ├── meeting_transcript.md         # Fictional PawCore meeting for the final exercise
 │   └── generate_support_tickets.py   # Script that generated the data
 ├── plugins/
 │   └── xo/                   # XO plugin by Dan Chaffelson (Apache 2.0), ready to install
@@ -123,6 +124,21 @@ A copy is included in this folder at [`plugins/xo/`](plugins/xo/), so you don't 
 4. Start a new session in CoCo Desktop and check that XO appears under **Customize > Plugins**. To check its health at any time, run `bash plugins/xo/setup.sh status`.
 
 For a private, git-backed vault on your GitHub account, run `bash plugins/xo/setup.sh init` instead (requires `gh auth login`). The copy here is pinned to the version noted in [`plugins/README.md`](plugins/README.md); for updates, install from [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo). See XO's [SETUP.md](plugins/xo/SETUP.md) for details. Review a plugin's hooks and scripts before you install it.
+
+## Wrap-up: fact-check a meeting and automate the follow-up
+
+The [`data/meeting_transcript.md`](data/meeting_transcript.md) file is a fictional PawCore weekly sync. The team says a few things with confidence, and not all of them hold up against the ticket data. The meeting ends with Jordan agreeing to pull the same numbers by hand every Monday.
+
+In a new session, type `@` to point CoCo at the transcript and the table, then send:
+
+> Hey, can you read through @data/meeting_transcript.md and check what the team said against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS? I want to know what they got right and what they got wrong, with the numbers to back it up. Then fix the action items so they match what the data actually says. Last thing: Jordan shouldn't have to pull these numbers by hand every Monday. Can you set up an automation that runs Mondays at 8 AM, counts connectivity tickets by firmware version and region for the most recent week in the data, and flags anything on firmware 2.1.0? Show me what you'll set up before you create it.
+
+You should get back:
+- A quick true-or-false check of each claim, with the counts.
+- Corrected action items.
+- A proposed weekly automation. CoCo asks before it creates it.
+
+Automations in CoCo Desktop run on your computer and only while the app is open. When you're done, ask CoCo to delete this one.
 
 ## Questions
 

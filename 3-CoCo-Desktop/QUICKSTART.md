@@ -58,6 +58,14 @@ Open **Customize** and set up what you need:
 - **Rules:** put team rules in the project's `AGENTS.md`.
 - **Plugins:** optional. Install **XO** by Dan Chaffelson from this folder ([steps](README.md#optional-the-xo-plugin)).
 
+## Step 10: Fact-check a meeting and automate the follow-up
+Open a new session. Type `@` to point CoCo at the transcript and the table, then send:
+> Hey, can you read through @data/meeting_transcript.md and check what the team said against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS? I want to know what they got right and what they got wrong, with the numbers to back it up. Then fix the action items so they match what the data actually says. Last thing: Jordan shouldn't have to pull these numbers by hand every Monday. Can you set up an automation that runs Mondays at 8 AM, counts connectivity tickets by firmware version and region for the most recent week in the data, and flags anything on firmware 2.1.0? Show me what you'll set up before you create it.
+
+1. Read the true-or-false check. Does each claim have a number behind it?
+2. Review the proposed automation before you approve it.
+3. Automations run on your computer, only while CoCo Desktop is open. When you're done, ask CoCo to delete this one.
+
 ## Habits to keep
 - Before every task, check the project, role, and warehouse.
 - Tell CoCo where to look and whether it may change things.
