@@ -8,6 +8,8 @@ You need:
 - A role with `SNOWFLAKE.CORTEX_USER` or `SNOWFLAKE.CORTEX_AGENT_USER`, and a warehouse.
 - This `3-CoCo-Desktop` folder, unzipped.
 
+If something doesn't work, check [Troubleshooting](TROUBLESHOOTING.md).
+
 ## Step 1: Install and sign in
 1. Download CoCo Desktop from the [official downloads page](https://www.snowflake.com/en/product/snowflake-coco/downloads/) and install it.
 2. Open it and sign in with your account identifier, login name, and sign-in method.

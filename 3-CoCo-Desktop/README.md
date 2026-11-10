@@ -8,12 +8,13 @@ It's also Lab 3 of the [PawCore series](../README.md#the-series). Labs [1](../1-
 
 ## What's here
 
-**Start with the [Quickstart](QUICKSTART.md)**: step-by-step instructions to run the lab yourself.
+**Start with the [Quickstart](QUICKSTART.md)**: step-by-step instructions to run the lab yourself. Stuck? See [Troubleshooting](TROUBLESHOOTING.md).
 
 ```
 3-CoCo-Desktop/
 ├── 3-CoCo-Desktop.zip            # This whole folder as one download
 ├── QUICKSTART.md                 # Quickstart: step-by-step lab instructions
+├── TROUBLESHOOTING.md            # Fixes for common setup issues
 ├── .snowflake/cortex/skills/
 │   └── human-voice/SKILL.md      # Skill that rewrites output in a plain, human voice
 ├── data/
@@ -141,5 +142,8 @@ You should get back:
 Automations in CoCo Desktop run on your computer and only while the app is open. When you're done, ask CoCo to delete this one.
 
 ## Questions
+
+Stuck on setup? Start with [Troubleshooting](TROUBLESHOOTING.md).
+
 
 Reach out to your Snowflake account rep, or contact Caleb Alexander at [caleb.alexander@snowflake.com](mailto:caleb.alexander@snowflake.com).
