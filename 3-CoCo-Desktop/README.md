@@ -91,8 +91,6 @@ If a check doesn't match, ask CoCo why before you move on. Common causes: no act
 
 A SmartCollar V2 support lead asks: which region needs attention, and what evidence supports that call? The lab shows how to give CoCo focused context, review the action it proposes, and check the answer against the data.
 
-A tested Desktop take-home exercise will be added here.
-
 ## Make CoCo sound more human
 
 There are two ways to do this, and you can use both.
@@ -158,9 +156,21 @@ You should get back:
 
 Automations in CoCo Desktop run on your computer and only while the app is open. When you're done, ask CoCo to delete this one.
 
+## Clean up
+
+When you're done, remove what the lab created so it doesn't take up space or credits in your account. In a new session in the `3-CoCo-Desktop` project, send:
+
+> Show me everything this lab created in my Snowflake account under `PAWCORE_ANALYTICS`: the database, schema, stage, file format, and table. Don't drop anything yet. After I review the list and approve, drop the `PAWCORE_ANALYTICS` database.
+
+Read the list before you approve. Dropping the database removes everything inside it, including any other tables you've added there.
+
+Then:
+- **The automation:** if you created one in the wrap-up, ask CoCo to delete it, or delete it from **Automations** in the sidebar.
+- **The XO plugin:** if you don't want to keep it, open **Customize > Plugins**, select XO, and remove it.
+- **The lab folder:** delete the unzipped `3-CoCo-Desktop` folder last. If you installed XO, remove the plugin first, because CoCo runs it from that folder.
+
 ## Questions
 
 Stuck on setup? Start with [Troubleshooting](TROUBLESHOOTING.md).
 
-
-Reach out to your Snowflake account rep, or contact Caleb Alexander at [caleb.alexander@snowflake.com](mailto:caleb.alexander@snowflake.com).
+For any other questions about this lab, email Caleb Alexander at [caleb.alexander@snowflake.com](mailto:caleb.alexander@snowflake.com), or reach out to your Snowflake account rep.
