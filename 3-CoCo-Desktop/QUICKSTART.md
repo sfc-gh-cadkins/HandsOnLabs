@@ -62,7 +62,7 @@ Open **Customize** and set up what you need:
 
 ## Step 10: Fact-check a meeting and automate the follow-up
 Open a new session. Type `@` to point CoCo at the transcript and the table, then send:
-> Fact-check @data/meeting_transcript.md against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS, fix the action items, and turn Jordan's Monday task into a weekly automation. Use the latest week in the data, and show me the automation before you create it.
+> Fact-check @data/meeting_transcript.md against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS, then automate Jordan's Monday task.
 
 1. Read the true-or-false check. Does each claim have a number behind it?
 2. Review the proposed automation before you approve it.

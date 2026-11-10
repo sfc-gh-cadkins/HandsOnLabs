@@ -144,7 +144,7 @@ The [`data/meeting_transcript.md`](data/meeting_transcript.md) file is a fiction
 
 In a new session, type `@` to point CoCo at the transcript and the table, then send:
 
-> Fact-check @data/meeting_transcript.md against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS, fix the action items, and turn Jordan's Monday task into a weekly automation. Use the latest week in the data, and show me the automation before you create it.
+> Fact-check @data/meeting_transcript.md against @PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS, then automate Jordan's Monday task.
 
 You should get back:
 - A quick true-or-false check of each claim, with the counts.
