@@ -1,0 +1,401 @@
+# Cortex Code in Snowsight: Build a Full Data Pipeline with AI
+
+> **PawCore is a fictional company.** All data, names, metrics, and scenarios are simulated for demonstration purposes only.
+
+In this quickstart you will use **Cortex Code**, the AI coding assistant built into Snowflake's web interface, to go from raw data to a fully operational analytics pipeline - without writing a single line of code manually. You will fix broken queries, build a Snowflake Notebook, create a Dynamic Table pipeline, deploy a Streamlit application, and launch a Snowflake CoWork agent, all through natural language.
+
+**The scenario:** PawCore, a pet health technology company, is preparing to launch SmartCollar V2. The CX team needs to know whether support operations are ready for the volume V2 will bring. You will build the analytics infrastructure to answer that question.
+
+---
+
+### Prerequisites
+
+- A Snowflake account with the **ACCOUNTADMIN** role (or a role with sufficient privileges)
+- Cortex Code enabled in your Snowflake environment (**Settings > Cortex Code > toggle on**)
+- A modern web browser
+- Approximately 45 minutes
+
+### What You Will Learn
+
+- Fix broken SQL using natural language and the inline Fix button
+- Create Snowflake Notebooks from a single prompt
+- Build auto-refreshing Dynamic Table pipelines
+- Deploy Streamlit applications directly in Snowflake
+- Create Semantic Views and Cortex Agents for self-service analytics
+
+### What You Will Build
+
+```
+Raw Data (7 tables)
+  -> Notebook (explore support patterns & telemetry correlations)
+    -> Dynamic Table (operationalize as auto-refresh pipeline)
+      -> Streamlit App (visual dashboard for daily standup)
+      -> Intelligence Agent (conversational analytics for ad-hoc investigation)
+```
+
+---
+
+## Step 1: Environment Setup
+
+### Create a Workspace
+
+1. Open your browser and navigate to your Snowflake account URL
+2. Log in with your credentials and ensure you are using the **ACCOUNTADMIN** role
+3. Click **Projects** in the left sidebar
+4. Select **Workspaces** from the dropdown menu
+5. Click **+ Workspace** to create a new workspace (or open an existing one)
+6. Inside your workspace, click the **+** button in the tab bar and select **SQL file**
+7. The **Cortex Code AI assistant panel** appears on the right side
+
+> **Tip:** The Cortex Code panel is context-aware. It knows which project, database, and files you are working with.
+
+### Load PawCore Data
+
+Cortex Code in the UI cannot fetch files from external URLs, so you will copy the setup script into a worksheet.
+
+1. Open the setup script from the GitHub repo: [00_setup.sql](https://raw.githubusercontent.com/sfc-gh-cadkins/HandsOnLabs/main/2-Cortex-Code/April%201%20HOL%20-%20CoCo%20UI/exercises/00_setup.sql)
+2. **Copy the full script** and **paste it into your SQL worksheet**
+3. In the Cortex Code panel, type:
+
+```
+Execute this setup script in the worksheet. Proceed autonomously - allow all statements in PAWCORE_ANALYTICS.
+```
+
+4. CoCo will parse and execute each statement. You will see a **permission prompt** - choose **"Allow all non-read SQL"** to speed things up.
+5. The script creates:
+   - `PAWCORE_ANALYTICS` database with 6 schemas
+   - An API integration with the public GitHub repo
+   - A Git Repository object for data loading
+   - 7 tables loaded with demo data
+   - A Cortex Search Service for document search
+
+> The script is non-destructive. If you already have a PAWCORE_ANALYTICS database, existing objects are preserved.
+
+**Alternative:** Paste the script and click **"Run All"** in the worksheet manually.
+
+> **Note:** The setup script requires the **ACCOUNTADMIN** role. No external integrations or Git connections are needed — all data is generated inline.
+
+### Verify Data Loaded
+
+In the Cortex Code panel, type:
+
+```
+Show me row counts for all tables in PAWCORE_ANALYTICS
+```
+
+| Table | Expected Rows |
+|-------|--------------|
+| DEVICE_DATA.TELEMETRY | ~21,000 |
+| MANUFACTURING.QUALITY_LOGS | ~800+ |
+| SUPPORT.CUSTOMER_REVIEWS | ~1,500+ |
+| SUPPORT.SLACK_MESSAGES | ~37 |
+| SUPPORT.SUPPORT_TICKETS | ~240 |
+| SUPPORT.V2_BETA_FEEDBACK | ~120 |
+| UNSTRUCTURED.PARSED_CONTENT | 1+ |
+
+---
+
+## Step 2: Fix Broken Code with Cortex Code
+
+Cortex Code can diagnose and fix broken SQL using natural language, the inline Fix button, and the Explain feature.
+
+### Stage the Broken Query
+
+Copy and paste this **intentionally broken** SQL into your worksheet:
+
+```sql
+SELECT region, severity, COUNT(*) as ticket_count
+FROM PAWCORE_ANALYTICS.SUPORT.SUPPORT_TICKETS
+GROUP BY region, severity
+ORDER BY ticket_count DES;
+```
+
+Three errors are hidden in this query:
+1. `DES` should be `DESC`
+2. `SUPORT` should be `SUPPORT`
+3. `severity` should be `PRIORITY` (the actual column name)
+
+### Use the Explain Button
+
+1. **Select the entire query** in the worksheet
+2. The **inline toolbar** appears: Add to Chat, Explain, Quick Edit, Format
+3. Click **Explain**
+4. CoCo returns a plain-English explanation of what the query does
+
+> If you inherited code from someone who left the team, you do not have to reverse-engineer it. Highlight and click Explain.
+
+### Method 1: Natural Language Fix
+
+Fix `DES` using natural language:
+
+1. **Select `DES`** on line 4
+2. Click **"Add to Chat"** in the inline toolbar
+3. In the CoCo panel, type:
+
+```
+Fix this - it should be DESC
+```
+
+4. CoCo returns the corrected line. **Accept the change.**
+
+### Method 2: Inline Fix Button
+
+Fix `SUPORT` using the compiler:
+
+1. **Run the query** - you get an error: `Schema 'PAWCORE_ANALYTICS.SUPORT' does not exist`
+2. A **Fix** button appears below the error message
+3. **Click Fix** - CoCo shows a diff view with the correction: `SUPORT` -> `SUPPORT`
+4. Click **"Keep all in file"** to accept
+
+### Method 3: Schema Introspection
+
+Fix `severity` -> `PRIORITY`:
+
+1. **Run the query** - you get: `invalid identifier 'SEVERITY'`
+2. **Click Fix** - CoCo checks the actual table columns and finds the table uses `PRIORITY`
+3. **Accept the change.** Run the query - 8 rows returned.
+
+---
+
+## Step 3: Build a Snowflake Notebook
+
+PawCore's analytics team has a basic starter model that predicts customer review ratings from device telemetry. It only uses two features and a simple linear regression. We will upload it to Snowflake and use Cortex Code to turn it into a production-quality analysis.
+
+### Upload the Starter Notebook
+
+1. Download **`support_ops_starter.ipynb`** from the GitHub repo (`exercises/` folder)
+2. In Snowsight, navigate to **Notebooks** (left sidebar)
+3. Click the **down arrow** next to **+ Notebook** and select **Import .ipynb file**
+4. Upload `support_ops_starter.ipynb`
+5. Set the notebook location to **PAWCORE_ANALYTICS.SUPPORT**
+6. Set the warehouse to **PAWCORE_DEMO_WH**
+7. Rename the notebook to **Support Ops Readiness Analysis**
+
+### Review the Starter Model
+
+Open the notebook and review what exists:
+- **Cell 1:** Connects to Snowflake via `get_active_session()`
+- **Cell 2:** Joins CUSTOMER_REVIEWS and TELEMETRY, pulls only 2 features (AVG_BATTERY, AVG_TEMP)
+- **Cell 3:** Fits a basic `LinearRegression` with a train/test split
+
+This is intentionally bare-bones. The R-squared will be low because we are only using two numeric features and ignoring review text, support ticket data, and regional patterns.
+
+### Enhance with Cortex Code
+
+In the Cortex Code panel, paste this prompt:
+
+```
+This notebook has a basic linear regression predicting customer review
+ratings from only 2 telemetry features. It needs serious improvement.
+
+Enhance this model:
+- Add feature engineering: pull in support ticket counts, critical ticket
+  ratios, and resolution times per device from PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS
+- Add AI-powered sentiment scores on review text using SNOWFLAKE.CORTEX.SENTIMENT
+- Replace LinearRegression with a better model (RandomForest or GradientBoosting)
+- Add proper evaluation: cross-validation, feature importance plot, and
+  a comparison of before/after R-squared scores
+- Add a final summary cell that flags each region as SUPPORT_READY or
+  AT_RISK based on predicted ratings and sentiment
+
+Run each cell after creating it. Continue autonomously.
+```
+
+CoCo reads the existing notebook, understands the starter model, and builds on top of it - adding feature engineering cells, sentiment analysis, a stronger model, and proper evaluation metrics.
+
+---
+
+## Step 4: Create a Dynamic Table Pipeline
+
+The first question after a good analysis is always: *"When does this go stale?"* A Dynamic Table solves this - define a query, attach a refresh interval, and Snowflake handles the rest. No Airflow, no cron jobs, no orchestration layer.
+
+### Build the Dynamic Table
+
+In the Cortex Code panel:
+
+```
+Create a Dynamic Table called PAWCORE_ANALYTICS.SUPPORT.SUPPORT_OPS_DASHBOARD
+that keeps a live view of our support operations health by region.
+
+Aggregate ticket counts and critical ticket counts from SUPPORT_TICKETS,
+customer ratings and low-rating counts from CUSTOMER_REVIEWS, low battery
+events from TELEMETRY, and AI-powered sentiment scores on review text
+using SNOWFLAKE.CORTEX.SENTIMENT. Flag each region as SUPPORT_READY
+when critical tickets are under 20 and sentiment is positive.
+
+Use PAWCORE_DEMO_WH warehouse and a target lag of 1 minute.
+
+Execute the SQL.
+```
+
+CoCo generates a `CREATE OR REPLACE DYNAMIC TABLE` statement with proper joins, aggregations, AI sentiment function, and target lag configuration.
+
+### Verify the Pipeline
+
+Query the Dynamic Table:
+
+```
+Show me all rows from the SUPPORT_OPS_DASHBOARD dynamic table
+```
+
+You should see one row per region with aggregated support ops metrics and the SUPPORT_READY flag.
+
+Check refresh status:
+
+```
+Show me the refresh history for the SUPPORT_OPS_DASHBOARD dynamic table
+```
+
+> Dynamic Tables eliminate ETL scheduling. Define the query once, and Snowflake automatically refreshes the results when upstream data changes.
+
+---
+
+## Step 5: Deploy a Streamlit Application
+
+The CX team needs something they can check every morning before standup - not a spreadsheet, not a notebook, but a real application.
+
+### Generate the App
+
+In the Cortex Code panel:
+
+```
+Build a Streamlit in Snowflake app called "Support Ops Dashboard"
+in PAWCORE_ANALYTICS.SUPPORT.
+
+The app should:
+1. Read from the SUPPORT_OPS_DASHBOARD dynamic table
+2. Show a header: "SmartCollar - Support Operations Dashboard"
+3. Display regional readiness cards with color coding:
+   green for SUPPORT_READY regions, red for NEEDS_ATTENTION regions
+4. Show a bar chart comparing total_tickets vs critical_tickets
+   by region
+5. Show a metrics table with all columns including avg_sentiment,
+   low_battery_events, and low_rating_count
+6. Add a "Risk Assessment" section that flags regions where
+   critical_tickets are high or avg_sentiment is negative
+
+Use the Snowpark session for data access. Deploy the app.
+```
+
+CoCo generates a complete Streamlit Python file and creates the app in Snowflake.
+
+### Open and Interact
+
+1. Navigate to **Projects** -> **Streamlit** in Snowsight
+2. Open the **Support Ops Dashboard**
+3. Review regional readiness cards, the ticket severity bar chart, and the risk assessment
+
+### Iterate with CoCo
+
+Ask CoCo to enhance the app:
+
+```
+Add a section to the Streamlit app that shows the top 5 most critical
+support tickets from PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS,
+filtered by the region selected in a sidebar dropdown.
+```
+
+> CoCo builds full applications from natural language. The app reads from the Dynamic Table, so it is always current. You can iterate on the design conversationally.
+
+---
+
+## Step 6: Build a Semantic View and Intelligence Agent
+
+The final step: give the CX team self-service analytics through Snowflake CoWork - ad-hoc questions in natural language, no SQL required.
+
+### Create the Semantic View
+
+In the Cortex Code panel:
+
+```
+Create a semantic view PAWCORE_ANALYTICS.SEMANTIC.SUPPORT_OPS over these tables:
+PAWCORE_ANALYTICS.SUPPORT.SUPPORT_TICKETS
+PAWCORE_ANALYTICS.SUPPORT.CUSTOMER_REVIEWS
+PAWCORE_ANALYTICS.DEVICE_DATA.TELEMETRY
+PAWCORE_ANALYTICS.SUPPORT.SLACK_MESSAGES
+
+Metrics:
+total_tickets — count of tickets
+critical_ticket_count — count where priority = 'Critical'
+average_customer_rating — average of the rating column
+low_battery_event_count — count of telemetry rows where battery_level < 0.20
+average_sentiment_score — average of SNOWFLAKE.CORTEX.SENTIMENT(review_text)
+
+Relationships: Join tickets and reviews to telemetry on (device_id, region). slack_messages has no shared join key — include it as a standalone table.
+
+Exclude data_type from dimensions.
+```
+
+### Create the Agent
+
+```
+Create a Cortex Agent called PAWCORE_SUPPORT_OPS_AGENT in PAWCORE_ANALYTICS.SEMANTIC. Attach the PAWCORE_ANALYTICS.SEMANTIC.SUPPORT_OPS semantic view as a Cortex Analyst tool. Use these response instructions: respond concisely with bullet points, always include a regional breakdown when relevant, and highlight EMEA specifically when ticket volume or sentiment is a concern. Grant USAGE on the agent to the PUBLIC role.
+```
+
+### Test in Snowflake CoWork
+
+1. Navigate to **AI & ML -> Agents -> Snowflake CoWork tab**
+2. Click **"Add existing agent"**, search for `PAWCORE_SUPPORT_OPS_AGENT`, and confirm
+3. Switch to **Snowflake CoWork** and test:
+
+```
+Which region has the highest support ticket load and what's driving it?
+```
+
+```
+Is there a correlation between low battery events and critical support tickets?
+```
+
+> The full pipeline is now connected: raw data -> Dynamic Table -> Streamlit dashboard -> Intelligence agent.
+
+---
+
+## Conclusion
+
+Congratulations! You have built a complete analytics pipeline using Cortex Code in Snowsight - entirely through natural language.
+
+### What You Learned
+
+- How to fix broken SQL using the Explain button, natural language, and the inline Fix button
+- How to create multi-cell Snowflake Notebooks from a single prompt
+- How to build auto-refreshing Dynamic Table pipelines
+- How to deploy Streamlit applications directly inside Snowflake
+- How to create Semantic Views and Cortex Agents for self-service analytics via Snowflake CoWork
+
+### What You Built
+
+| Asset | What It Does |
+|-------|-------------|
+| **Code Fixing** | Fixed errors using natural language and the inline Fix button |
+| **Snowflake Notebook** | Interactive support ops analysis with AI sentiment scoring |
+| **Dynamic Table** | Auto-refreshing pipeline aggregating regional support metrics |
+| **Streamlit Dashboard** | Live Support Ops Dashboard deployed in Snowflake |
+| **Semantic View + Agent** | Self-service natural language support analytics via Snowflake CoWork |
+
+### Cleanup
+
+To remove objects created during this lab only:
+
+```sql
+USE ROLE ACCOUNTADMIN;
+DROP DYNAMIC TABLE IF EXISTS PAWCORE_ANALYTICS.SUPPORT.SUPPORT_OPS_DASHBOARD;
+DROP SEMANTIC VIEW IF EXISTS PAWCORE_ANALYTICS.SEMANTIC.SUPPORT_OPS;
+DROP STREAMLIT IF EXISTS PAWCORE_ANALYTICS.SUPPORT.SUPPORT_OPS_DASHBOARD;
+```
+
+To remove everything:
+
+```sql
+USE ROLE ACCOUNTADMIN;
+DROP DATABASE IF EXISTS PAWCORE_ANALYTICS;
+DROP WAREHOUSE IF EXISTS PAWCORE_DEMO_WH;
+DROP API INTEGRATION IF EXISTS github_api;
+```
+
+### Related Resources
+
+- [GitHub Repository](https://github.com/sfc-gh-cadkins/HandsOnLabs)
+- [Cortex Code Documentation](https://docs.snowflake.com/en/user-guide/ui-snowsight-cortex-code)
+- [Dynamic Tables Documentation](https://docs.snowflake.com/en/user-guide/dynamic-tables-about)
+- [Streamlit in Snowflake Documentation](https://docs.snowflake.com/en/developer-guide/streamlit/about-streamlit)
+- [Snowflake CoWork Documentation](https://docs.snowflake.com/user-guide/snowflake-cortex/snowflake-intelligence)
