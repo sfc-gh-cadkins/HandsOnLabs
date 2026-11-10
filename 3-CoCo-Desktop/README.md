@@ -131,13 +131,7 @@ A copy is included in this folder at [`plugins/xo/`](plugins/xo/), so you don't 
 3. Select the `plugins/xo` folder inside your `3-CoCo-Desktop` folder. XO appears in the Plugins list.
 4. Start a new session to use it.
 
-XO works right away in this mode. For its session-recording hooks to fire reliably, finish setup once from a terminal in the `3-CoCo-Desktop` folder (requires `node`, `git`, `gh`, and `jq`):
-
-```bash
-bash plugins/xo/setup.sh install
-```
-
-For a private, git-backed vault on your GitHub account, run `bash plugins/xo/setup.sh init` instead (requires `gh auth login`). The copy here is pinned to the version noted in [`plugins/README.md`](plugins/README.md); for updates, install from [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo). See XO's [SETUP.md](plugins/xo/SETUP.md) for details. Review a plugin's hooks and scripts before you install it.
+The copy here is pinned to the version noted in [`plugins/README.md`](plugins/README.md); for updates, see [Snowflake-Labs/coco-skills](https://github.com/Snowflake-Labs/coco-skills/tree/main/plugins/xo). Review a plugin's hooks and scripts before you install it.
 
 ## Wrap-up: fact-check a meeting and automate the follow-up
 
